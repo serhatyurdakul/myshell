@@ -7,6 +7,65 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+import ("os/exec");
+
+void parseEdildiMi(char *parseEdilecek, char **parseEdilen)
+{
+    int i;
+    for (i = 0; i < 100; i++)
+    {
+        parseEdilen[i] = strsep(&parseEdilecek, "|");
+        if (parseEdilen[i] == NULL) break;
+        if (strlen(parseEdilen[i]) == 0)  i--;
+    }
+}
+
+
+
+int length(char *metin[])
+{
+    int x = 0;
+    while (metin[x] != '\0')
+    {
+        x++;
+    }
+    return x;
+}
+
+void paraseAra(char *parseEdilecek, char **parseEdilen)
+{
+    int i;
+    for (i = 0; i < 100; i++)
+    {
+        parseEdilen[i] = strsep(&parseEdilecek, " ");
+        if (parseEdilen[i] == NULL) break;
+        if (strlen(parseEdilen[i]) == 0) i--;
+    }
+}
+
+
+void exec(char *argv[])
+{
+    char *args[4];
+    args[0] = argv[1];
+    args[1] = argv[2];
+    args[2] = argv[3];
+    args[3] = NULL;
+    int j;
+    int f = fork();
+    if (f == 0)
+    {
+        j = execv(argv[0], args);
+        if (j < 0)
+        {
+            printf("gecersiz  komut girildi");
+        }
+    }
+    else {
+        wait(&j);
+    }
+}
+
 int InputAl(char *input)
 {
     char *line;
@@ -21,64 +80,6 @@ int InputAl(char *input)
     {
         return 1;
     }
-}
-
-void parseEdildiMi(char *parseEdilecek, char **parseEdilen)
-{
-    int i;
-    for (i = 0; i < 100; i++)
-    {
-        parseEdilen[i] = strsep(&parseEdilecek, "|");
-        if (parseEdilen[i] == NULL)
-            break;
-        if (strlen(parseEdilen[i]) == 0)
-            i--;
-    }
-}
-
-void paraseAra(char *parseEdilecek, char **parseEdilen)
-{
-    int i;
-    for (i = 0; i < 100; i++)
-    {
-        parseEdilen[i] = strsep(&parseEdilecek, " ");
-        if (parseEdilen[i] == NULL)
-            break;
-        if (strlen(parseEdilen[i]) == 0)
-            i--;
-    }
-}
-
-void exec(char *argv[])
-{
-    char *yeniargv[4];
-    yeniargv[0] = argv[1];
-    yeniargv[1] = argv[2];
-    yeniargv[2] = argv[3];
-    yeniargv[3] = NULL;
-    int i;
-    int f = fork();
-    if (f == 0)
-    {
-        i = execv(argv[0], yeniargv);
-        if (i < 0)
-        {
-            printf("gecersiz  komut girildi");
-        }
-    }
-    else {
-        wait(&i);
-    }
-}
-
-int length(char *metin[])
-{
-    int x = 0;
-    while (metin[x] != '\0')
-    {
-        x++;
-    }
-    return x;
 }
 
 int main(){
@@ -103,13 +104,13 @@ int main(){
                 printf("\033[H\033[J");
             }else if (strcmp(kelimeler[0], "cat") == 0)
             {
-                char *newargs[3];
-                newargs[0] = "cat";
-                newargs[1] = kelimeler[1];
-                newargs[2] = NULL;
+                char *args[3];
+                args[0] = "cat";
+                args[1] = kelimeler[1];
+                args[2] = NULL;
                 int f1;
                 f1 = fork();
-                if (f1 == 0) execv("/bin/cat", newargs);
+                if (f1 == 0) execv("/bin/cat", args);
                 else
                 {
                     wait(&i);
