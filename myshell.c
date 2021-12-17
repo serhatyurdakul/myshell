@@ -7,7 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-import ("os/exec");
+
 
 void parseEdildiMi(char *parseEdilecek, char **parseEdilen)
 {
