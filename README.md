@@ -1,1 +1,3 @@
-# os_prj1
+# myshell
+
+A simple linux shell
